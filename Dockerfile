@@ -27,10 +27,8 @@ RUN pip install --upgrade pip
 
 RUN chmod +x /app/scripts/setup.sh
 
-RUN chmod +x /app/scripts/run.sh
-
 RUN /app/scripts/setup.sh
 
+RUN chmod +x /app/scripts/run.sh
 
-CMD [ "/app/scripts/run.sh" ]
-
+ENTRYPOINT ["/app/scripts/run.sh"]
