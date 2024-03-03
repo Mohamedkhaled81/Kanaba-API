@@ -2,7 +2,7 @@
 
 var="$mode"
 
-if [ var == "DEV" ]
+if [ var = "DEV" ]
 then
     pip install -r /tmp/requirements-dev.txt
     pip install -r /tmp/requirements.txt

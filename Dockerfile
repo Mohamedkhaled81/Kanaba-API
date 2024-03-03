@@ -20,15 +20,16 @@ COPY ./project .
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
+    && apt-get install -y netcat \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip
 
-RUN chmod +x /app/scripts/setup.sh
+RUN chmod +x /app/scripts/setup.sh && \
+    chmod +x /app/scripts/run.sh
 
 RUN /app/scripts/setup.sh
 
-RUN chmod +x /app/scripts/run.sh
 
-ENTRYPOINT [ "/app/scripts/run.sh" ]
 
+CMD ["/bin/bash", "/app/scripts/run.sh"]
