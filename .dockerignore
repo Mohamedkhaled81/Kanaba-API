@@ -13,3 +13,8 @@ project/*/*/*/__pycache__/
 .env/
 .venv/
 venv/
+
+
+
+#LICENSE
+LICENSE
