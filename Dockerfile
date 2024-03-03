@@ -30,9 +30,5 @@ RUN /app/scripts/setup.sh
 
 RUN chmod +x /app/scripts/run.sh
 
-<<<<<<< Updated upstream
-ENTRYPOINT ["/app/scripts/run.sh"]
-=======
 ENTRYPOINT [ "/app/scripts/run.sh" ]
 
->>>>>>> Stashed changes
