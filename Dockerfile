@@ -22,7 +22,6 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-
 RUN pip install --upgrade pip
 
 RUN chmod +x /app/scripts/setup.sh
@@ -31,4 +30,9 @@ RUN /app/scripts/setup.sh
 
 RUN chmod +x /app/scripts/run.sh
 
+<<<<<<< Updated upstream
 ENTRYPOINT ["/app/scripts/run.sh"]
+=======
+ENTRYPOINT [ "/app/scripts/run.sh" ]
+
+>>>>>>> Stashed changes

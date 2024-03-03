@@ -21,7 +21,7 @@ services:
 
   db:
     image: postgres:15
-    container_name: postgres-container
+    container_name: psql-container
     volumes:
       - postgres-data:/var/lib/postgresql/data/
     environment:
