@@ -1,18 +1,15 @@
 #!/bin/sh
 
-var="$mode"
+pip install --upgrade pip
 
-if [ var = "DEV" ]
-then
+if [ "$mode" = "DEV" ];then
     pip install -r /tmp/requirements-dev.txt
     pip install -r /tmp/requirements.txt
-    
 else
     pip install -r /tmp/requirements.txt
-
 fi
 
-rm -rf /tmp
+rm -f /tmp/requirements-dev.txt /tmp/requirements.txt
 
 
 
