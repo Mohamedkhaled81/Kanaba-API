@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'core',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -132,4 +133,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Overriding the default User Model
 
-AUTH_USER_MODEL = 'core.KanabaUser' 
+AUTH_USER_MODEL = 'core.User' 

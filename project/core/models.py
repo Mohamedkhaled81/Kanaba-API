@@ -8,15 +8,15 @@ from django.contrib.auth.models import (
 )
 
 
-class KanabaUserManager(BaseUserManager):
-    """Kanaba User Manager"""
+class UserManager(BaseUserManager):
+    """User Manager"""
     def create_user(self, email, password=None, **other_fields):
         if not email:
             raise ValueError("Email Should not be empty!")
         if not password:
             raise ValueError("Password should be given!")
 
-        email = KanabaUserManager.normalize_email(email)
+        email = UserManager.normalize_email(email)
         email = email.lower()
         user = self.model(email=email, **other_fields)
         user.set_password(password)
@@ -39,8 +39,8 @@ class Role(models.TextChoices):
     DESIGNER = "DESIGNER", "Designer"
 
 
-class KanabaUser(AbstractBaseUser, PermissionsMixin):
-    """Kanaba User mdoel"""
+class User(AbstractBaseUser, PermissionsMixin):
+    """User mdoel"""
     user_id = models.BigAutoField(primary_key=True)
     email = models.EmailField(max_length=254, unique=True)
     first_name = models.CharField(max_length=50)
@@ -52,7 +52,7 @@ class KanabaUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
-    objects = KanabaUserManager()
+    objects = UserManager()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['first_name', 'last_name']
