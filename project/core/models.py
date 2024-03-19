@@ -46,6 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     slug_name = models.SlugField()
+    # adding phone field 
     role = models.CharField(choices=Role.choices)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
