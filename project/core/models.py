@@ -58,11 +58,6 @@ class Role(models.TextChoices):
     DESIGNER = "DESIGNER", "Designer"
 
 
-class Gender(models.TextChoices):
-    MALE = "M", "Male"
-    FEMALE = "F", "Female"
-
-
 class User(AbstractBaseUser, PermissionsMixin):
     """User model"""
     user_id = models.BigAutoField(primary_key=True)
@@ -70,7 +65,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     slug_name = models.SlugField()
-    gender = models.CharField(chiocies=Gender.choices, default=None)
     phone_number = PhoneNumberField(unique=True)
     role = models.CharField(choices=Role.choices, default=Role.CUSTOMER)
     created_at = models.DateTimeField(auto_now_add=True)
