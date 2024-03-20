@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
     netcat \
+    libmagic-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory

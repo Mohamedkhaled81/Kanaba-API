@@ -3,82 +3,80 @@ Test Models
 """
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from core.models import Role
 
 
-def create_user_data(**kwargs):
-    user_data = {
-        'email': 'test@example.com',
-        'first_name': 'test',
-        'last_name': 'test2',
-        'password': '12345pass',
-        'role': 'Customer',
-        }
-    user_data.update(kwargs)
+def create_data(new={}):
+    data_set = {
+                'first_name': 'Mohamed',
+                'last_name': 'zakaria',
+                'email': 'momo@example.com',
+                'password': 'Test123',
+                'phone_number': '+201011111111',
+                'role': 'CUSTOMER'
+                }
+    data_set.update(new)
+    return data_set
 
-    return user_data
 
-
-class TestModels(TestCase):
-
+class TestCustomUserModel(TestCase):
+    """Testing the functionality of CustomUserModel"""
     def test_create_customer(self):
-        user_data = create_user_data(role='Customer')
-        user = get_user_model().objects.create_user(**user_data)
-
-        self.assertIn(user, get_user_model().objects.all())
-        self.assertEqual(
-            user,
-            get_user_model().objects.get(user_id=user.user_id))
-
-        self.assertTrue(user.check_password(user_data['password']))
-        self.assertTrue(user.role, user_data['role'])
-
-    def test_creat_user_without_email(self):
-        user_data = create_user_data(email='')
-
-        with self.assertRaises(ValueError):
-            get_user_model().objects.create_user(
-                **user_data
-            )
-
-    def test_creat_user_wihtout_password(self):
-        user_data = create_user_data(password='')
-
-        with self.assertRaises(ValueError):
-            get_user_model().objects.create_user(
-                **user_data
-            )
-
-    def test_create_superuser(self):
-        user_data = create_user_data(role='Admin')
-
-        user = get_user_model().objects.create_superuser(**user_data)
-        self.assertIn(user, get_user_model().objects.all())
-        self.assertEqual(
-            user,
-            get_user_model().objects.get(user_id=user.user_id))
-
-        self.assertTrue(user.is_superuser)
-        self.assertTrue(user.is_staff)
-        self.assertTrue(user.role, user_data['role'])
-
-    def test_create_designer(self):
-        user_data = create_user_data(role='Desginer')
-
-        user = get_user_model().objects.create_user(**user_data)
-        self.assertIn(user, get_user_model().objects.all())
-        self.assertEqual(
-            user,
-            get_user_model().objects.get(user_id=user.user_id))
-
-        self.assertEqual(user.role, user_data['role'])
+        customer_data = create_data()
+        customer = get_user_model().objects.create_user(**customer_data)
+        self.assertEqual(customer.role, Role.CUSTOMER)
+        self.assertFalse(customer.is_superuser)
+        self.assertFalse(customer.is_staff)
+        self.assertTrue(customer.is_active)
 
     def test_create_tenant(self):
-        user_data = create_user_data(role='Tenant')
+        tenant_data = create_data({'role': 'TENANT'})
+        tenant = get_user_model().objects.create_user(**tenant_data)
+        self.assertEqual(tenant.role, Role.TENANT)
+        self.assertFalse(tenant.is_superuser)
+        self.assertFalse(tenant.is_staff)
+        self.assertTrue(tenant.is_active)
 
+    def test_create_admin(self):
+        admin_data = create_data({'role': 'ADMIN'})
+        admin = get_user_model().objects.create_superuser(**admin_data)
+        self.assertEqual(admin.role, Role.ADMIN)
+        self.assertTrue(admin.is_superuser)
+        self.assertTrue(admin.is_staff)
+        self.assertTrue(admin.is_active)
+
+    def test_create_staff(self):
+        staff_data = create_data({'role': 'DESIGNER'})
+        staff = get_user_model().objects.create_staff(**staff_data)
+        self.assertEqual(staff.role, Role.DESIGNER)
+        self.assertFalse(staff.is_superuser)
+        self.assertTrue(staff.is_staff)
+        self.assertTrue(staff.is_active)
+
+    def test_create_no_email(self):
+        user_data = create_data({'email': ''})
+        with self.assertRaises(ValueError):
+            get_user_model().objects.create_user(user_data)
+
+    def test_create_no_password(self):
+        user_data = create_data({'password': ''})
+        with self.assertRaises(ValueError):
+            get_user_model().objects.create_user(user_data)
+
+    def test_slug_name(self):
+        user_data = create_data()
         user = get_user_model().objects.create_user(**user_data)
-        self.assertIn(user, get_user_model().objects.all())
-        self.assertEqual(
-            user,
-            get_user_model().objects.get(user_id=user.user_id))
+        self.assertNotEqual('mohamed-khaled', user.slug_name)
+        self.assertEqual('mohamed-zakaria', user.slug_name)
 
-        self.assertEqual(user.role, user_data['role'])
+    def test_many_users_same_email(self):
+        user_one = create_data()
+        user_two = create_data()
+        with self.assertRaises(Exception):
+            get_user_model.objects.create_user(**user_one)
+            get_user_model.objects.create_user(**user_two)
+
+    def test_enter_phone_no_without_region(self):
+        user_data = create_data({'phone_number': '01011111111'})
+        user = get_user_model().objects.create_user(**user_data)
+        self.assertEqual(user.phone_number, '+201011111111')
