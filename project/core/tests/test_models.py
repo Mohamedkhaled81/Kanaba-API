@@ -63,6 +63,11 @@ class TestCustomUserModel(TestCase):
         with self.assertRaises(ValueError):
             get_user_model().objects.create_user(user_data)
 
+    def test_check_password(self):
+        user_data = create_data()
+        user = get_user_model().objects.create_user(**user_data)
+        self.assertTrue(user.check_password(user_data['password']))
+
     def test_slug_name(self):
         user_data = create_data()
         user = get_user_model().objects.create_user(**user_data)
@@ -71,7 +76,7 @@ class TestCustomUserModel(TestCase):
 
     def test_many_users_same_email(self):
         user_one = create_data()
-        user_two = create_data()
+        user_two = create_data({'phone_number': '+201011111112'})
         with self.assertRaises(Exception):
             get_user_model.objects.create_user(**user_one)
             get_user_model.objects.create_user(**user_two)
@@ -80,3 +85,10 @@ class TestCustomUserModel(TestCase):
         user_data = create_data({'phone_number': '01011111111'})
         user = get_user_model().objects.create_user(**user_data)
         self.assertEqual(user.phone_number, '+201011111111')
+
+    def test_two_users_with_same_no(self):
+        user_one = create_data()
+        user_two = create_data({'email': 'zk123@example.com'})
+        with self.assertRaises(Exception):
+            get_user_model.objects.create_user(**user_one)
+            get_user_model.objects.create_user(**user_two)
