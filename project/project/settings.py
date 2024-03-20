@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'core',
     'user',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Overriding the default User Model
 
 AUTH_USER_MODEL = 'core.User' 
+
+# Giving a default region { EGYPT } for the phone number
+
+PHONENUMBER_DEFAULT_REGION = 'EG'
+
+# Adding the media directory
+
+MEDIA_DIR = BASE_DIR / 'media'
